@@ -9,9 +9,24 @@ import cv2
 import base64
 
 app = Flask(__name__)
+app.config["CLIENT_IMAGES"] = "/home/pi/Desktop/server/"
 
-@app.route("/capture_picture")
-def capture_picture():
+@app.route("/get_image")
+def get_image():
+	print("Getting Image from directory- " + app.config["CLIENT_IMAGES"])
+	# invoke rpi to take image with usb camera
+	# save usb image to img send_from_directory
+	# encode image into base64 and send to device via the request
+	try:
+		print(app.config["CLIENT_IMAGES"] + image_name)
+		image_file = open(app.config["CLIENT_IMAGES"] + image_name, "rb")
+		encoded_string = base64.b64encode(image_file.read())
+		return encoded_string
+	except FileNotFoundError:
+		return "FileNotFound"
+
+@app.route("/capture_image")
+def capture_image():
     print("Capturing image with usb camera at video0")
     cam = cv2.VideoCapture(0)
     ret,frame = cam.read()
