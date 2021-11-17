@@ -23,7 +23,7 @@ def get_image():
 		encoded_string = base64.b64encode(image_file.read())
 		return encoded_string
 	except FileNotFoundError:
-		return "FileNotFound"
+		return "FILE_ERROR"
 
 @app.route("/capture_image")
 def capture_image():
@@ -33,13 +33,14 @@ def capture_image():
 
     if not ret:
         print("Failed to capture frame")
-        exit()
+        return "CAPTURE_ERROR"
 
     img_name = "magnifier_image.png"
     cv2.imwrite(img_name, frame)
     print("Image written as {}".format(img_name))
 
-    cam.release()    
+    cam.release() 
+    return "CAPTURE_SUCCESS"
 
 @app.route("/start_motion")
 def start_motion():
