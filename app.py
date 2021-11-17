@@ -18,7 +18,7 @@ def get_image():
 	# save usb image to img send_from_directory
 	# encode image into base64 and send to device via the request
 	try:
-		print(app.config["CLIENT_IMAGES"] + image_name)
+		print(app.config["CLIENT_IMAGES"] + magnifier_image.png)
 		image_file = open(app.config["CLIENT_IMAGES"] + image_name, "rb")
 		encoded_string = base64.b64encode(image_file.read())
 		return encoded_string
