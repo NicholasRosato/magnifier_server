@@ -10,6 +10,7 @@ import base64
 
 app = Flask(__name__)
 app.config["CLIENT_IMAGES"] = "/home/pi/Desktop/server/"
+image_name = "magnifier_image.png"
 
 @app.route("/get_image")
 def get_image():
@@ -18,7 +19,7 @@ def get_image():
 	# save usb image to img send_from_directory
 	# encode image into base64 and send to device via the request
 	try:
-		print(app.config["CLIENT_IMAGES"] + "magnifier_image.png")
+		print(app.config["CLIENT_IMAGES"] + image_name)
 		image_file = open(app.config["CLIENT_IMAGES"] + image_name, "rb")
 		encoded_string = base64.b64encode(image_file.read())
 		return encoded_string
