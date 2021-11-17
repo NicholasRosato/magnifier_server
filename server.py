@@ -27,32 +27,32 @@ def get_image():
 
 @app.route("/capture_image")
 def capture_image():
-    print("Capturing image with usb camera at video0")
-    cam = cv2.VideoCapture(0)
-    ret,frame = cam.read()
+	print("Capturing image with usb camera at video0")
+	cam = cv2.VideoCapture(0)
+	ret,frame = cam.read()
 
-    if not ret:
-        print("Failed to capture frame")
-        return "CAPTURE_ERROR"
+	if not ret:
+		print("Failed to capture frame")
+		return "CAPTURE_ERROR"
 
-    img_name = "magnifier_image.png"
-    cv2.imwrite(img_name, frame)
-    print("Image written as {}".format(img_name))
+	img_name = "magnifier_image.png"
+	cv2.imwrite(img_name, frame)
+	print("Image written as {}".format(img_name))
 
-    cam.release() 
-    return "CAPTURE_SUCCESS"
+	cam.release() 
+	return "CAPTURE_SUCCESS"
 
 @app.route("/start_motion")
 def start_motion():
-    print("Starting motion video server...")
-    os.system("sudo service motion start")
-    return "MOTION_START"
+	print("Starting motion video server...")
+	os.system("sudo service motion start")
+	return "MOTION_START"
 
 @app.route("/stop_motion")
 def stop_motion():
-    print("Stopping motion video server...")
-    os.system("sudo service motion stop")
-    return "MOTION_STOP"
+	print("Stopping motion video server...")
+	os.system("sudo service motion stop")
+	return "MOTION_STOP"
 
 @app.route("/")
 def index():
