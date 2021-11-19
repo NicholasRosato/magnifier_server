@@ -72,5 +72,10 @@ def stop_motion():
 def index():
 	response = jsonify(message="INDEX")
 	response.headers.add("Access-Control-Allow-Origin", "*") 
+	response.headers.add("Access-Control-Allow-Methods", "POST, GET, OPTIONS, PUT, DELETE, HEAD");
+	response.headers.add("Access-Control-Allow-Headers", "custId, appId, Origin, Content-Type, Cookie, X-CSRF-TOKEN, Accept, Authorization, X-XSRF-TOKEN, Access-Control-Allow-Origin");
+	response.headers.add("Access-Control-Expose-Headers", "Authorization, authenticated");
+	response.headers.add("Access-Control-Max-Age", "1728000");
+	response.headers.add("Access-Control-Allow-Credentials", "true");
 	return response
 
