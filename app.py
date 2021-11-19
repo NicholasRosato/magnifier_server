@@ -9,6 +9,7 @@ import cv2
 import base64
 
 app = Flask(__name__)
+CORS(app)
 app.config["CLIENT_IMAGES"] = "/home/pi/Desktop/server/"
 image_name = "magnifier_image.png"
 
@@ -23,11 +24,9 @@ def get_image():
 		image_file = open(app.config["CLIENT_IMAGES"] + image_name, "rb")
 		encoded_string = base64.b64encode(image_file.read())
 		response = jsonify(message=encoded_string)
-		response.headers.add("Access-Control-Allow-Origin", "*") 
 		return response
 	except FileNotFoundError:
 		response = jsonify(message="FILE_ERROR")
-		response.headers.add("Access-Control-Allow-Origin", "*") 
 		return response
 
 @app.route("/capture_image")
@@ -39,7 +38,6 @@ def capture_image():
 	if not ret:
 		print("Failed to capture frame")
 		reponse = jsonify(message="CAPTURE_ERROR")
-		response.headers.add("Access-Control-Allow-Origin", "*") 
 		return response
 
 	img_name = "magnifier_image.png"
@@ -48,15 +46,13 @@ def capture_image():
 
 	cam.release() 
 	response = jsonify(message="CAPTURE_SUCCESS")
-	response.headers.add("Access-Control-Allow-Origin", "*") 
 	return response
 
 @app.route("/start_motion")
 def start_motion():
 	print("Starting motion video server...")
 	os.system("sudo service motion start")
-	response = jsonify(message="MOTION_START")
-	response.headers.add("Access-Control-Allow-Origin", "*") 
+	response = jsonify(message="MOTION_START") 
 	return response
 
 @app.route("/stop_motion")
@@ -64,18 +60,11 @@ def stop_motion():
 	print("Stopping motion video server...")
 	os.system("sudo service motion stop")
 	response = jsonify(message="MOTION_STOP")
-	response.headers.add("Access-Control-Allow-Origin", "*") 
 	return response
 
 
 @app.route("/")
 def index():
 	response = jsonify(message="INDEX")
-	response.headers.add("Access-Control-Allow-Origin", "*") 
-	response.headers.add("Access-Control-Allow-Methods", "POST, GET, OPTIONS, PUT, DELETE, HEAD");
-	response.headers.add("Access-Control-Allow-Headers", "custId, appId, Origin, Content-Type, Cookie, X-CSRF-TOKEN, Accept, Authorization, X-XSRF-TOKEN, Access-Control-Allow-Origin");
-	response.headers.add("Access-Control-Expose-Headers", "Authorization, authenticated");
-	response.headers.add("Access-Control-Max-Age", "1728000");
-	response.headers.add("Access-Control-Allow-Credentials", "true");
 	return response
 
