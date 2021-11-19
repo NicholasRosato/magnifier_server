@@ -7,10 +7,12 @@ from flask import Flask, jsonify
 import os
 import cv2
 import base64
+from flask_cors import CORS, cross_origin
 
 app = Flask(__name__)
 CORS(app)
 app.config["CLIENT_IMAGES"] = "/home/pi/Desktop/server/"
+app.config['CORS_HEADERS'] = 'Content-Type'
 image_name = "magnifier_image.png"
 
 @app.route("/get_image")
