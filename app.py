@@ -22,9 +22,13 @@ def get_image():
 		print(app.config["CLIENT_IMAGES"] + image_name)
 		image_file = open(app.config["CLIENT_IMAGES"] + image_name, "rb")
 		encoded_string = base64.b64encode(image_file.read())
-		return jsonify(message=encoded_string)
+		response = jsonify(message=encoded_string)
+		response.headers.add("Access-Control-Allow-Origin", "*") 
+		return response
 	except FileNotFoundError:
-		return jsonify(message="FILE_ERROR")
+		response = jsonify(message="FILE_ERROR")
+		response.headers.add("Access-Control-Allow-Origin", "*") 
+		return response
 
 @app.route("/capture_image")
 def capture_image():
@@ -34,27 +38,39 @@ def capture_image():
 
 	if not ret:
 		print("Failed to capture frame")
-		return jsonify(message="CAPTURE_ERROR")
+		reponse = jsonify(message="CAPTURE_ERROR")
+		response.headers.add("Access-Control-Allow-Origin", "*") 
+		return response
 
 	img_name = "magnifier_image.png"
 	cv2.imwrite(img_name, frame)
 	print("Image written as {}".format(img_name))
 
 	cam.release() 
-	return jsonify(message="CAPTURE_SUCCESS")
+	response = jsonify(message="CAPTURE_SUCCESS")
+	response.headers.add("Access-Control-Allow-Origin", "*") 
+	return response
 
 @app.route("/start_motion")
 def start_motion():
 	print("Starting motion video server...")
 	os.system("sudo service motion start")
-	return jsonify(message="MOTION_START")
+	response = jsonify(message="MOTION_START")
+	response.headers.add("Access-Control-Allow-Origin", "*") 
+	return response
 
 @app.route("/stop_motion")
 def stop_motion():
 	print("Stopping motion video server...")
 	os.system("sudo service motion stop")
-	return jsonify(message="MOTION_STOP")
+	response = jsonify(message="MOTION_STOP")
+	response.headers.add("Access-Control-Allow-Origin", "*") 
+	return response
+
 
 @app.route("/")
 def index():
-	return jsonify(message="INDEX")
+	response = jsonify(message="INDEX")
+	response.headers.add("Access-Control-Allow-Origin", "*") 
+	return response
+
