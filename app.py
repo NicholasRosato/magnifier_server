@@ -4,16 +4,28 @@
 # last updated 11/17/2021
 
 from flask import Flask, jsonify
+from flask_cors import CORS, cross_origin
+from base64 import encodebytes
+from PIL import Image
 import os
 import cv2
-import base64
-from flask_cors import CORS, cross_origin
+import io
+
+
 
 app = Flask(__name__)
 CORS(app)
 app.config["CLIENT_IMAGES"] = "/home/pi/Desktop/server/"
 app.config['CORS_HEADERS'] = 'Content-Type'
 image_name = "magnifier_image.png"
+
+
+def get_response_image(image_path):
+	pil_img = Image.open(image_path, mode='r') # reads the PIL image
+	byte_arr = io.BytesIO()
+	pil_img.save(byte_arr, format='PNG') # convert the PIL image to byte array
+	encoded_img = encodebytes(byte_arr.getvalue()).decode('ascii') # encode as base64
+	return encoded_img
 
 @app.route("/get_image")
 @cross_origin()
@@ -24,11 +36,8 @@ def get_image():
 	# encode image into base64 and send to device via the request
 	try:
 		print(app.config["CLIENT_IMAGES"] + image_name)
-		image_binary = read_image(image_name)
-		response = make_response(image_binary)
-		response.headers.set('Content-Type', 'image/png')
-		response.headers.set('Content-Disposition', 'attachment', filename=image_name)
-		jsonify(response)
+		encoded_img = get_response_image(image_name)
+		return jsonify(response) # send the result to client
 		return response
 		
 	except FileNotFoundError:
