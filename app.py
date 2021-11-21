@@ -3,7 +3,7 @@
 # EPICS magnifier flask server
 # last updated 11/17/2021
 
-from flask import Flask, jsonify
+from flask import Flask, jsonify, send_file
 from flask_cors import CORS, cross_origin
 from PIL import Image
 import os
