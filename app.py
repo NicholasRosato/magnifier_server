@@ -16,6 +16,7 @@ app.config['CORS_HEADERS'] = 'Content-Type'
 image_name = "magnifier_image.png"
 
 @app.route("/get_image")
+@cross_origin()
 def get_image():
 	print("Getting Image from directory- " + app.config["CLIENT_IMAGES"])
 	# invoke rpi to take image with usb camera
@@ -32,6 +33,7 @@ def get_image():
 		return response
 
 @app.route("/capture_image")
+@cross_origin()
 def capture_image():
 	print("Capturing image with usb camera at video0")
 	cam = cv2.VideoCapture(0)
@@ -51,6 +53,7 @@ def capture_image():
 	return response
 
 @app.route("/start_motion")
+@cross_origin()
 def start_motion():
 	print("Starting motion video server...")
 	os.system("sudo service motion start")
@@ -58,6 +61,7 @@ def start_motion():
 	return response
 
 @app.route("/stop_motion")
+@cross_origin()
 def stop_motion():
 	print("Stopping motion video server...")
 	os.system("sudo service motion stop")
