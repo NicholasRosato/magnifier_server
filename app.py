@@ -37,8 +37,8 @@ def get_image():
 	try:
 		print(app.config["CLIENT_IMAGES"] + image_name)
 		encoded_img = get_response_image(image_name)
+		response =  { 'Status' : 'Success', 'ImageBytes': encoded_img}
 		return jsonify(response) # send the result to client
-		return response
 		
 	except FileNotFoundError:
 		response = jsonify(message="FILE_ERROR")
