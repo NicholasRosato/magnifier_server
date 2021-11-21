@@ -5,7 +5,7 @@
 
 from flask import Flask, jsonify
 from flask_cors import CORS, cross_origin
-from base64 import encodebytes
+from base64
 from PIL import Image
 import os
 import cv2
@@ -24,7 +24,7 @@ def get_response_image(image_path):
 	pil_img = Image.open(image_path, mode='r') # reads the PIL image
 	byte_arr = io.BytesIO()
 	pil_img.save(byte_arr, format='PNG') # convert the PIL image to byte array
-	encoded_img = encodebytes(byte_arr.getvalue()).decode('ascii') # encode as base64
+	encoded_img = base64.b64encode(byte_arr.read()).decode('ascii')
 	return encoded_img
 
 @app.route("/get_image")
