@@ -35,10 +35,11 @@ def get_image():
 	# save usb image to img send_from_directory
 	# encode image into base64 and send to device via the request
 	try:
-		print(app.config["CLIENT_IMAGES"] + image_name)
-		encoded_img = get_response_image(image_name)
-		response =  { 'Status' : 'Success', 'ImageBytes': encoded_img}
-		return jsonify(response) # send the result to client
+		#print(app.config["CLIENT_IMAGES"] + image_name)
+		#encoded_img = get_response_image(image_name)
+		#response =  { 'Status' : 'Success', 'ImageBytes': encoded_img}
+		#return jsonify(response) # send the result to client
+		return send_file(image_name)
 		
 	except FileNotFoundError:
 		response = jsonify(message="FILE_ERROR")
