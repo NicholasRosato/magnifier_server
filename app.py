@@ -29,7 +29,7 @@ def get_image():
 		response.headers.set('Content-Type', 'image/png')
 		response.headers.set('Content-Disposition', 'attachment', filename=image_name)
 		jsonify(response)
-   		return response
+		return response
 		
 	except FileNotFoundError:
 		response = jsonify(message="FILE_ERROR")
