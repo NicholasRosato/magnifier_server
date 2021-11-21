@@ -26,8 +26,8 @@ def get_image():
 		print(app.config["CLIENT_IMAGES"] + image_name)
 		image_binary = read_image(image_name)
 		response = make_response(image_binary)
-		response.headers.set('Content-Type', 'image/jpeg')
-    		response.headers.set('Content-Disposition', 'attachment', filename=image_name)
+		response.headers.set('Content-Type', 'image/png')
+		response.headers.set('Content-Disposition', 'attachment', filename=image_name)
 		jsonify(response)
    		return response
 		
