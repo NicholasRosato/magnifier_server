@@ -24,10 +24,13 @@ def get_image():
 	# encode image into base64 and send to device via the request
 	try:
 		print(app.config["CLIENT_IMAGES"] + image_name)
-		image_file = open(app.config["CLIENT_IMAGES"] + image_name, "rb")
-		encoded_string = base64.b64encode(image_file.read())
-		response = jsonify(message=encoded_string)
-		return response
+		image_binary = read_image(image_name)
+		response = make_response(image_binary)
+		response.headers.set('Content-Type', 'image/jpeg')
+    		response.headers.set('Content-Disposition', 'attachment', filename=image_name)
+		jsonify(response)
+   		return response
+		
 	except FileNotFoundError:
 		response = jsonify(message="FILE_ERROR")
 		return response
