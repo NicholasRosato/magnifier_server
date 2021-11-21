@@ -66,6 +66,7 @@ def stop_motion():
 
 
 @app.route("/")
+@cross_origin()
 def index():
 	response = jsonify(message="INDEX")
 	return response
