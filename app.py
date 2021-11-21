@@ -19,51 +19,31 @@ app.config["CLIENT_IMAGES"] = "/home/pi/Desktop/server/"
 app.config['CORS_HEADERS'] = 'Content-Type'
 image_name = "magnifier_image.png"
 
-
-def get_response_image(image_path):
-	pil_img = Image.open(image_path, mode='r') # reads the PIL image
-	byte_arr = io.BytesIO()
-	pil_img.save(byte_arr, format='PNG') # convert the PIL image to byte array
-	encoded_img = base64.b64encode(byte_arr.read()).decode('ascii')
-	return encoded_img
-
 @app.route("/get_image")
 @cross_origin()
 def get_image():
 	print("Getting Image from directory- " + app.config["CLIENT_IMAGES"])
-	# invoke rpi to take image with usb camera
-	# save usb image to img send_from_directory
-	# encode image into base64 and send to device via the request
+	
+	# TODO: Fix error handling for all cases
 	try:
-		#print(app.config["CLIENT_IMAGES"] + image_name)
-		#encoded_img = get_response_image(image_name)
-		#response =  { 'Status' : 'Success', 'ImageBytes': encoded_img}
-		#return jsonify(response) # send the result to client
+		print("Capturing image with usb camera at video0")
+		cam = cv2.VideoCapture(0)
+		ret,frame = cam.read()
+
+		if not ret:
+			print("Failed to capture frame")
+			# TODO: return a failed to capture stock image
+
+		img_name = "magnifier_image.png"
+		cv2.imwrite(img_name, frame)
+		print("Image written as {}".format(img_name))
+
+		cam.release() 
 		return send_file(image_name)
 		
 	except FileNotFoundError:
 		response = jsonify(message="FILE_ERROR")
 		return response
-
-@app.route("/capture_image")
-@cross_origin()
-def capture_image():
-	print("Capturing image with usb camera at video0")
-	cam = cv2.VideoCapture(0)
-	ret,frame = cam.read()
-
-	if not ret:
-		print("Failed to capture frame")
-		reponse = jsonify(message="CAPTURE_ERROR")
-		return response
-
-	img_name = "magnifier_image.png"
-	cv2.imwrite(img_name, frame)
-	print("Image written as {}".format(img_name))
-
-	cam.release() 
-	response = jsonify(message="CAPTURE_SUCCESS")
-	return response
 
 @app.route("/start_motion")
 @cross_origin()
