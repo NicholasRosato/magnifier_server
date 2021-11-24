@@ -10,7 +10,7 @@ import os
 import cv2
 import io
 import base64
-
+import color_filter
 
 
 app = Flask(__name__)
@@ -19,31 +19,32 @@ app.config["CLIENT_IMAGES"] = "/home/pi/Desktop/server/"
 app.config['CORS_HEADERS'] = 'Content-Type'
 image_name = "magnifier_image.png"
 
+def capture_frame():
+	# TODO: Fix error handling for all cases
+    print("Capturing image with usb camera at video0")
+    cam = cv2.VideoCapture(0)
+    ret,frame = cam.read()
+
+    if not ret:
+        print("Failed to capture frame")
+		# TODO: return a failed to capture stock image
+    
+    return frame
+
+
 @app.route("/get_image")
 @cross_origin()
 def get_image():
-	print("Getting Image from directory- " + app.config["CLIENT_IMAGES"])
-	
-	# TODO: Fix error handling for all cases
-	try:
-		print("Capturing image with usb camera at video0")
-		cam = cv2.VideoCapture(0)
-		ret,frame = cam.read()
+    print("Getting Image from directory- " + app.config["CLIENT_IMAGES"])
+    frame = capture_frame()	    
+    frame = color_filter.filter(frame)
+    img_name = "magnifier_image.png"
+    cv2.imwrite(img_name, frame)
+    print("Image written as {}".format(img_name))
 
-		if not ret:
-			print("Failed to capture frame")
-			# TODO: return a failed to capture stock image
-
-		img_name = "magnifier_image.png"
-		cv2.imwrite(img_name, frame)
-		print("Image written as {}".format(img_name))
-
-		cam.release() 
-		return send_file(image_name)
+    cam.release() 
+    return send_file(image_name)
 		
-	except FileNotFoundError:
-		response = jsonify(message="FILE_ERROR")
-		return response
 
 @app.route("/start_motion")
 @cross_origin()
