@@ -32,7 +32,7 @@ def capture_frame():
     return frame
 
     
-@app.route("/get_image/<cf_option>")
+@app.route("/get_image/<cf_option>/")
 @cross_origin()
 def get_image(cf_option):
     frame = capture_frame()	    
