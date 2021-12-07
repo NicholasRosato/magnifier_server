@@ -6,7 +6,7 @@
 import cv2
 import numpy as np
 
-def filter(frame):
+def filter(frame, option):
     # convert from BLUE GREEN RED (RGB) color space to HSV color space
     hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
     

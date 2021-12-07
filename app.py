@@ -24,25 +24,27 @@ def capture_frame():
     print("Capturing image with usb camera at video0")
     cam = cv2.VideoCapture(0)
     ret,frame = cam.read()
-
+    cam.release()
     if not ret:
         print("Failed to capture frame")
 		# TODO: return a failed to capture stock image
     
     return frame
 
-
-@app.route("/get_image")
+    
+@app.route("/get_image/<cf_option>")
 @cross_origin()
-def get_image():
-    print("Getting Image from directory- " + app.config["CLIENT_IMAGES"])
+def get_image(cf_option):
     frame = capture_frame()	    
-    frame = color_filter.filter(frame)
+    
+    if (cf_option != "none"):
+        frame = color_filter.filter(frame, cf_option)
+    
     img_name = "magnifier_image.png"
     cv2.imwrite(img_name, frame)
     print("Image written as {}".format(img_name))
 
-    cam.release() 
+    print("Sending image from directory- " + app.config["CLIENT_IMAGES"])
     return send_file(image_name)
 		
 
